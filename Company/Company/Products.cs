@@ -98,7 +98,7 @@ namespace Company
 
 
         // FOR:  MouseDoubleClick on DataGridView THEN ShowData In All TextBoxes
-        private void ProductDataGridView_MouseDoubleClick(object sender, MouseEventArgs e)0
+        private void ProductDataGridView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ProductCodeTextBox.Text = ProductDataGridView.SelectedRows[0].Cells[0].Value.ToString();
             ProductNameTextBox.Text = ProductDataGridView.SelectedRows[0].Cells[1].Value.ToString();
