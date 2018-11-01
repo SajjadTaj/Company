@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -40,7 +41,10 @@
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.AddButton = new System.Windows.Forms.Button();
+            this.ResetButton = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ProductDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -138,11 +142,11 @@
             this.DeleteButton.BackColor = System.Drawing.Color.Crimson;
             this.DeleteButton.Font = new System.Drawing.Font("Georgia", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DeleteButton.ForeColor = System.Drawing.Color.GhostWhite;
-            this.DeleteButton.Location = new System.Drawing.Point(535, 55);
+            this.DeleteButton.Location = new System.Drawing.Point(439, 53);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(90, 35);
             this.DeleteButton.TabIndex = 3;
-            this.DeleteButton.Text = "Delete";
+            this.DeleteButton.Text = "&Delete";
             this.DeleteButton.UseVisualStyleBackColor = false;
             this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
@@ -151,19 +155,37 @@
             this.AddButton.BackColor = System.Drawing.Color.SeaGreen;
             this.AddButton.Font = new System.Drawing.Font("Georgia", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AddButton.ForeColor = System.Drawing.Color.GhostWhite;
-            this.AddButton.Location = new System.Drawing.Point(631, 55);
+            this.AddButton.Location = new System.Drawing.Point(535, 53);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(90, 35);
             this.AddButton.TabIndex = 4;
-            this.AddButton.Text = "Add";
+            this.AddButton.Text = "&Add";
             this.AddButton.UseVisualStyleBackColor = false;
             this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // ResetButton
+            // 
+            this.ResetButton.BackColor = System.Drawing.Color.SeaGreen;
+            this.ResetButton.Font = new System.Drawing.Font("Georgia", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ResetButton.ForeColor = System.Drawing.Color.GhostWhite;
+            this.ResetButton.Location = new System.Drawing.Point(631, 53);
+            this.ResetButton.Name = "ResetButton";
+            this.ResetButton.Size = new System.Drawing.Size(90, 35);
+            this.ResetButton.TabIndex = 10;
+            this.ResetButton.Text = "&Reset";
+            this.ResetButton.UseVisualStyleBackColor = false;
+            this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // Products
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(751, 460);
+            this.Controls.Add(this.ResetButton);
             this.Controls.Add(this.AddButton);
             this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.ProductDataGridView);
@@ -177,10 +199,10 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Products";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Products";
             this.Load += new System.EventHandler(this.Products_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ProductDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -200,5 +222,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.Button ResetButton;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

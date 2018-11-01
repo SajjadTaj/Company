@@ -106,7 +106,7 @@
             this.LoginButton.Size = new System.Drawing.Size(75, 32);
             this.LoginButton.TabIndex = 3;
             this.LoginButton.Tag = "";
-            this.LoginButton.Text = "Login";
+            this.LoginButton.Text = "&Login";
             this.LoginButton.UseVisualStyleBackColor = true;
             this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
             // 

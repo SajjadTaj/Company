@@ -27,7 +27,13 @@ namespace Company
         {
             Products pro = new Products();
             pro.MdiParent=this;
+            pro.StartPosition = FormStartPosition.CenterScreen;
             pro.Show();
+        }
+
+        private void StockMain_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

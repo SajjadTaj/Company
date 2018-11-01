@@ -23,43 +23,45 @@ namespace Company
             StatusComboBox.SelectedIndex = 0;
             LoadData();
         }
-
-
         // FOR: AddButton_Click
         private void AddButton_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(@"Data Source=TAJ-PC\SQLEXPRESS;Initial Catalog=Company;Integrated Security=True");
-            // FOR: INSERT / UPDATE Logic
-            con.Open();
-            bool status = false;
-            if (StatusComboBox.SelectedIndex == 0)
+            if (validation())
             {
-                status = true;
-            }
-            else
-            {
-                status = false;
-            }
+                SqlConnection con = Connection.GetConnection();
+                //SqlConnection con = new SqlConnection(@"Data Source=TAJ-PC\SQLEXPRESS;Initial Catalog=Company;Integrated Security=True");
+                // FOR: INSERT / UPDATE Logic
+                con.Open();
+                bool status = false;
+                if (StatusComboBox.SelectedIndex == 0)
+                {
+                    status = true;
+                }
+                else
+                {
+                    status = false;
+                }
 
-            var sqlQuery="";
-            if (IfProductsExists(con, ProductCodeTextBox.Text))
-            {
-                sqlQuery = @"UPDATE [Product] SET [ProductName] = '" + ProductNameTextBox.Text + "', [ProductStatus] = '" + status + "' WHERE [ProductCode] = '" + ProductCodeTextBox.Text + "'";
-            }
-            else
-            {
-                sqlQuery=(@"INSERT INTO [Company].[dbo].[Product]([ProductCode],[ProductName],[ProductStatus])
+                var sqlQuery = "";
+                if (IfProductsExists(con, ProductCodeTextBox.Text))
+                {
+                    sqlQuery = @"UPDATE [Product] SET [ProductName] = '" + ProductNameTextBox.Text + "', [ProductStatus] = '" + status + "' WHERE [ProductCode] = '" + ProductCodeTextBox.Text + "'";
+                }
+                else
+                {
+                    sqlQuery = (@"INSERT INTO [Company].[dbo].[Product]([ProductCode],[ProductName],[ProductStatus])
             VALUES
            ('" + ProductCodeTextBox.Text + "','" + ProductNameTextBox.Text + "','" + status + "')");
+                }
+                SqlCommand cmd = new SqlCommand(sqlQuery, con);
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+                //Reading Data
+                LoadData();
+                ResetRecords(); 
             }
-            SqlCommand cmd = new SqlCommand(sqlQuery, con);
-            cmd.ExecuteNonQuery();
-            con.Close();
-
-            //Reading Data
-            LoadData();
         }
-
         private bool IfProductsExists(SqlConnection con,string ProductCode)
         {
             SqlDataAdapter sda = new SqlDataAdapter("Select 1 From [Product] WHERE [ProductCode] = '" + ProductCode + "'", con);
@@ -70,10 +72,9 @@ namespace Company
             else
                 return false;
         }
-
         public void LoadData()
         {
-            SqlConnection con = new SqlConnection(@"Data Source=TAJ-PC\SQLEXPRESS;Initial Catalog=Company;Integrated Security=True");
+            SqlConnection con = Connection.GetConnection();
 
             SqlDataAdapter sda = new SqlDataAdapter("Select * From [Company].[dbo].[Product]", con);
             DataTable dt = new DataTable();
@@ -92,14 +93,12 @@ namespace Company
                 {
                     ProductDataGridView.Rows[n].Cells[2].Value = "Deactive";
                 }
-
             }
         }
-
-
         // FOR:  MouseDoubleClick on DataGridView THEN ShowData In All TextBoxes
         private void ProductDataGridView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            AddButton.Text = "Update";
             ProductCodeTextBox.Text = ProductDataGridView.SelectedRows[0].Cells[0].Value.ToString();
             ProductNameTextBox.Text = ProductDataGridView.SelectedRows[0].Cells[1].Value.ToString();
             if (ProductDataGridView.SelectedRows[0].Cells[2].Value.ToString() == "Active")
@@ -111,33 +110,78 @@ namespace Company
                 StatusComboBox.SelectedIndex=1;
             }
         }
-
-
-
         // FOR: DeleteButton_Click
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            // For:  DELETE FROM Product TABLE
-
-            SqlConnection con = new SqlConnection(@"Data Source=TAJ-PC\SQLEXPRESS;Initial Catalog=Company;Integrated Security=True");
-            var sqlQuery = "";
-            if (IfProductsExists(con, ProductCodeTextBox.Text))
+            DialogResult dialogResult = MessageBox.Show("Are You Sure Want to Delete?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
             {
-                con.Open();
-                sqlQuery = @"DELETE FROM [Product] WHERE [ProductCode] = '" + ProductCodeTextBox.Text + "'";
-                SqlCommand cmd = new SqlCommand(sqlQuery, con);
-                cmd.ExecuteNonQuery();
-                con.Close();
+                if (validation())
+                {
+                    // For:  DELETE FROM Product TABLE
+                    SqlConnection con = Connection.GetConnection();
+                    var sqlQuery = "";
+                    if (IfProductsExists(con, ProductCodeTextBox.Text))
+                    {
+                        con.Open();
+                        sqlQuery = @"DELETE FROM [Product] WHERE [ProductCode] = '" + ProductCodeTextBox.Text + "'";
+                        SqlCommand cmd = new SqlCommand(sqlQuery, con);
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Record Not Exits...!");
+                    }
+                    //Reading Data
+                    LoadData();
+                    ResetRecords();
+                }
+            }
+        }
+        // FOR: ResetRecords For All Buttons Applay
+        private void ResetRecords()
+        {
+            ProductCodeTextBox.Clear();
+            ProductNameTextBox.Clear();
+            StatusComboBox.SelectedIndex = -1;
+            AddButton.Text = "Add";
+            ProductCodeTextBox.Focus();
+        }
+        // FOR: ResetButton_Click
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            ResetRecords();
+        }
+        // FOR: Set validation For All Buttons Applay
+        private bool validation()
+        {
+            bool result = false;
+            if (string.IsNullOrEmpty(ProductCodeTextBox.Text))
+            {
+                errorProvider1.Clear();
+                errorProvider1.SetError(ProductCodeTextBox, "Product Code Required");
+            }
+            else if (string.IsNullOrEmpty(ProductNameTextBox.Text))
+            {
+                errorProvider1.Clear();
+                errorProvider1.SetError(ProductCodeTextBox, "Product Name Required");
+            }
+            else if (StatusComboBox.SelectedIndex == -1)
+            {
+                errorProvider1.Clear();
+                errorProvider1.SetError(StatusComboBox, "Selecte Status");
             }
             else
             {
-                MessageBox.Show("Record Not Exits...!");
+                result = true;
             }
-            //Reading Data
-            LoadData();
-            //ProductCodeTextBox.Clear();
-            //ProductNameTextBox.Clear();
-            //StatusComboBox.SelectedIndex = 0;
+
+            if (!string.IsNullOrEmpty(ProductCodeTextBox.Text) && !string.IsNullOrEmpty(ProductNameTextBox.Text) && StatusComboBox.SelectedIndex > -1)
+            {
+                result = true;
+            }
+            return result;
         }
     }
 }
